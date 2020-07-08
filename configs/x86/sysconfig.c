@@ -3,11 +3,12 @@
  *
  * Copyright (c) Siemens AG, 2014-2017
  *
- * This work is licensed under the terms of the GNU GPL, version 2.  See
- * the COPYING file in the top-level directory.
+ * Configuration for Supermicro C7X99-OCE-F
+ * created with '/usr/local/libexec/jailhouse/jailhouse config create -c ttyS1 --mem-hv 128M --mem-inmates 1536M test2.c'
+ * Modified for cRTOS usage by hand
  *
- * Alternatively, you can use or redistribute this file under the following
- * BSD license:
+ * Copyright (c) ChungFan Yang, 2020
+ *    <chungfan.yang@fixstars.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -31,9 +32,6 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
- *
- * Configuration for Supermicro C7X99-OCE-F
- * created with '/usr/local/libexec/jailhouse/jailhouse config create -c ttyS1 --mem-hv 128M --mem-inmates 1536M test2.c'
  *
  * NOTE: This config expects the following to be appended to your kernel cmdline
  *       "memmap=0x68000000$0x100000000"
