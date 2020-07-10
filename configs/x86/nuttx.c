@@ -5,7 +5,7 @@
  *
  * Hand crafted configuration for Nuttx in cRTOS
  *
- * Copyright (c) ChungFan Yang, 2020
+ * Copyright (c) ChungFan Yang @ Fixstars corporation, 2020
  *    <chungfan.yang@fixstars.com>
  *
  * Redistribution and use in source and binary forms, with or without

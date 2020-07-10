@@ -7,7 +7,7 @@
  * created with '/usr/local/libexec/jailhouse/jailhouse config create -c ttyS1 --mem-hv 128M --mem-inmates 1536M test2.c'
  * Modified for cRTOS usage by hand
  *
- * Copyright (c) ChungFan Yang, 2020
+ * Copyright (c) ChungFan Yang @ Fixstars corporation, 2020
  *    <chungfan.yang@fixstars.com>
  *
  * Redistribution and use in source and binary forms, with or without
