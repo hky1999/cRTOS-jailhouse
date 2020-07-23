@@ -459,14 +459,14 @@ struct {
 		},
 		/* MemRegion: 108000000-167ffffff : JAILHOUSE Inmate Memory */
 		{
-			.phys_start = 0x148000000,
-			.virt_start = 0x148000000,
+			.phys_start = 0x108000000,
+			.virt_start = 0x108000000,
 			.size = 0x1000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_ROOTSHARED,
 		},
 		{
-			.phys_start = 0x108000000,
-			.virt_start = 0x108000000,
+			.phys_start = 0x108001000,
+			.virt_start = 0x108001000,
 			.size =        0x40000000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
         JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_ROOTSHARED,

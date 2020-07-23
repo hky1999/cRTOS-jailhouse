@@ -68,13 +68,13 @@ struct {
 	.mem_regions = {
 		/* cRTOS Shadow memory */
 		{
-			.phys_start = 0x148000000,
-			.virt_start = 0x148000000,
+			.phys_start = 0x108000000,
+			.virt_start = 0x108000000,
 			.size = 0x1000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_ROOTSHARED,
 		},
 		{
-			.phys_start = 0x108000000,
+			.phys_start = 0x108001000,
 			.virt_start = 0,
 			.size = 0x40000000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
