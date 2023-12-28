@@ -46,10 +46,13 @@ struct {
 	struct jailhouse_system header;
 	__u64 cpus[1];
 	// struct jailhouse_memory mem_regions[51];
+	// struct jailhouse_memory mem_regions[<NUM OF MEM + 7>];
 	struct jailhouse_memory mem_regions[58];
 	struct jailhouse_irqchip irqchips[1];
 	struct jailhouse_pio pio_regions[16];
-	struct jailhouse_pci_device pci_devices[21];
+	// struct jailhouse_pci_device pci_devices[21];
+	// struct jailhouse_pci_device pci_devices[<NUM of Device> + 2];
+	struct jailhouse_pci_device pci_devices[23];
 	struct jailhouse_pci_capability pci_caps[60];
 } __attribute__((packed)) config = {
 	.header = {
@@ -985,6 +988,33 @@ struct {
 			.msix_region_size = 0x0,
 			.msix_address = 0x0,
 		},
+		{ /* IVSHMEM (shadow) */
+			.type = JAILHOUSE_PCI_TYPE_IVSHMEM,
+			.domain = 0x0,
+			.iommu = 1,
+			.bdf = 0x0e << 3,
+			.bar_mask = JAILHOUSE_IVSHMEM_BAR_MASK_MSIX,
+			.num_msix_vectors = 16,
+			// <NUM OF MEM - 1> = 50
+			// .shmem_regions_start = <NUM OF MEM - 1>,
+			.shmem_regions_start = 50,
+			.shmem_dev_id = 0,
+			.shmem_peers = 2,
+			.shmem_protocol = 0x0002,
+		},
+		{ /* IVSHMEM-NET */
+			.type = JAILHOUSE_PCI_TYPE_IVSHMEM,
+			.domain = 0x0,
+			.iommu = 1,
+			.bdf = 0x0d << 3,
+			.bar_mask = JAILHOUSE_IVSHMEM_BAR_MASK_MSIX,
+			.num_msix_vectors = 2,
+			// <NUM OF MEM + 3> = 53
+			.shmem_regions_start = 53,
+			.shmem_dev_id = 0,
+			.shmem_peers = 2,
+			.shmem_protocol = JAILHOUSE_SHMEM_PROTO_VETH,
+		}
 	},
 
 	.pci_caps = {
