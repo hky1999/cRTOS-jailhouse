@@ -449,6 +449,9 @@ int ivshmem_init(struct cell *cell, struct pci_device *device)
 	ive->link = link;
 	ive->shmem = jailhouse_cell_mem_regions(cell->config) +
 		dev_info->shmem_regions_start;
+
+	printk("ive->shmem %lx %lx size %lx\n", ive->shmem->phys_start, ive->shmem->virt_start, ive->shmem->size);
+
 	device->ivshmem_endpoint = ive;
 
 	device->cell = cell;
