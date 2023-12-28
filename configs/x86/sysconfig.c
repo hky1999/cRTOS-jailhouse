@@ -497,25 +497,25 @@ struct {
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_ROOTSHARED,
 		},
 		{
-			.phys_start = 0x42000000 + 0x1000,
-			.virt_start = 0x42000000 + 0x1000,
+			.phys_start = 0x42001000,
+			.virt_start = 0x42001000,
 			.size =       0x40000000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_ROOTSHARED,
 		},
 		{
-			.phys_start = 0x42000000 + 0x40001000,
-			.virt_start = 0x42000000 + 0x40001000,
+			.phys_start = 0x82001000,
+			.virt_start = 0x82001000,
 			.size = 0x4000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE | JAILHOUSE_MEM_ROOTSHARED,
 		},
 		{
-			.phys_start = 0x42000000 + 0x40005000,
-			.virt_start = 0x42000000 + 0x40005000,
+			.phys_start = 0x82005000,
+			.virt_start = 0x82005000,
 			.size = 0x4000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_ROOTSHARED,
 		},
-		JAILHOUSE_SHMEM_NET_REGIONS(0x42000000 + 0x40205000, 0),
+		JAILHOUSE_SHMEM_NET_REGIONS(0x82205000, 0),
 	},
 
 	.irqchips = {
