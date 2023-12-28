@@ -33,7 +33,7 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  *
  * Configuration for LENOVO ThinkCentre M8500T-N000
- * created with '/usr/local/libexec/jailhouse/jailhouse config create -c ttyS0 --mem-hv 128M --mem-inmates 1536M configs/x86/sysconfig.c'
+ * created with '/usr/local/libexec/jailhouse/jailhouse config create -c ttyS0 --mem-hv 128M --mem-inmates 1536M configs/x86/sysconfig_generated.c'
  *
  * NOTE: This config expects the following to be appended to your kernel cmdline
  *       "memmap=0x68000000$0x3a000000"
@@ -45,14 +45,10 @@
 struct {
 	struct jailhouse_system header;
 	__u64 cpus[1];
-	// struct jailhouse_memory mem_regions[51];
-	// struct jailhouse_memory mem_regions[<NUM OF MEM + 7>];
-	struct jailhouse_memory mem_regions[58];
+	struct jailhouse_memory mem_regions[51];
 	struct jailhouse_irqchip irqchips[1];
 	struct jailhouse_pio pio_regions[16];
-	// struct jailhouse_pci_device pci_devices[21];
-	// struct jailhouse_pci_device pci_devices[<NUM of Device> + 2];
-	struct jailhouse_pci_device pci_devices[23];
+	struct jailhouse_pci_device pci_devices[21];
 	struct jailhouse_pci_capability pci_caps[60];
 } __attribute__((packed)) config = {
 	.header = {
@@ -417,27 +413,27 @@ struct {
 			.size = 0x4b000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE,
 		},
-		/* MemRegion: 100000000-305dfffff : System RAM */
+		/* MemRegion: 100000000-1729fffff : System RAM */
 		{
 			.phys_start = 0x100000000,
 			.virt_start = 0x100000000,
-			.size = 0x205e00000,
+			.size = 0x72a00000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_DMA,
 		},
-		/* MemRegion: 305e00000-307ffffff : Kernel */
+		/* MemRegion: 172a00000-174ffffff : Kernel */
 		{
-			.phys_start = 0x305e00000,
-			.virt_start = 0x305e00000,
-			.size = 0x2200000,
+			.phys_start = 0x172a00000,
+			.virt_start = 0x172a00000,
+			.size = 0x2600000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_DMA,
 		},
-		/* MemRegion: 308000000-81edfffff : System RAM */
+		/* MemRegion: 175000000-81edfffff : System RAM */
 		{
-			.phys_start = 0x308000000,
-			.virt_start = 0x308000000,
-			.size = 0x516e00000,
+			.phys_start = 0x175000000,
+			.virt_start = 0x175000000,
+			.size = 0x6a9e00000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_DMA,
 		},
@@ -476,50 +472,13 @@ struct {
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_DMA,
 		},
-		/* 50 MemRegion: 42000000-a1ffffff : JAILHOUSE Inmate Memory */
-		// First, remove this entry in the memory region definition.
-		// {
-		// 	.phys_start = 0x42000000,
-		// 	.virt_start = 0x42000000,
-		// 	.size = 0x60000000,
-		// 	.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE,
-		// },
-		// Then, you should create memory regions for the shadow device with:
-		// * PAGE_SIZE state table
-		// * 1GB R/W Region, marked with execute
-		// * 4x PAGE_SIZE Input and Output regions 
-		// Append these after the Inmate Memory region.
-		/* 50 PAGE_SIZE state table */
+		/* MemRegion: 42000000-a1ffffff : JAILHOUSE Inmate Memory */
 		{
 			.phys_start = 0x42000000,
 			.virt_start = 0x42000000,
-			.size = 0x1000,
-			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_ROOTSHARED,
+			.size = 0x60000000,
+			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE,
 		},
-		/* 51 1GB R/W Region, marked with execute */
-		{
-			.phys_start = 0x42001000,
-			.virt_start = 0x42001000,
-			.size =       0x40000000,
-			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
-				JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_ROOTSHARED,
-		},
-		/* 52 4x PAGE_SIZE Output regions  */
-		{
-			.phys_start = 0x82001000,
-			.virt_start = 0x82001000,
-			.size = 0x4000,
-			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE | JAILHOUSE_MEM_ROOTSHARED,
-		},
-		/* 53 4x PAGE_SIZE Input regions  */
-		{
-			.phys_start = 0x82005000,
-			.virt_start = 0x82005000,
-			.size = 0x4000,
-			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_ROOTSHARED,
-		},
-		// 54 55 56 57
-		JAILHOUSE_SHMEM_NET_REGIONS(0x82205000, 0),
 	},
 
 	.irqchips = {
@@ -992,33 +951,6 @@ struct {
 			.msix_region_size = 0x0,
 			.msix_address = 0x0,
 		},
-		{ /* IVSHMEM (shadow) */
-			.type = JAILHOUSE_PCI_TYPE_IVSHMEM,
-			.domain = 0x0,
-			.iommu = 1,
-			.bdf = 0x0e << 3,
-			.bar_mask = JAILHOUSE_IVSHMEM_BAR_MASK_MSIX,
-			.num_msix_vectors = 16,
-			// <NUM OF MEM - 1> = 50
-			// .shmem_regions_start = <NUM OF MEM + 1>,
-			.shmem_regions_start = 50,
-			.shmem_dev_id = 0,
-			.shmem_peers = 2,
-			.shmem_protocol = 0x0002,
-		},
-		{ /* IVSHMEM-NET */
-			.type = JAILHOUSE_PCI_TYPE_IVSHMEM,
-			.domain = 0x0,
-			.iommu = 1,
-			.bdf = 0x0d << 3,
-			.bar_mask = JAILHOUSE_IVSHMEM_BAR_MASK_MSIX,
-			.num_msix_vectors = 2,
-			// <NUM OF MEM + 3> = 53
-			.shmem_regions_start = 54,
-			.shmem_dev_id = 0,
-			.shmem_peers = 2,
-			.shmem_protocol = JAILHOUSE_SHMEM_PROTO_VETH,
-		}
 	},
 
 	.pci_caps = {

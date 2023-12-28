@@ -401,6 +401,11 @@ int ivshmem_init(struct cell *cell, struct pci_device *device)
 	printk("Adding virtual PCI device %02x:%02x.%x to cell \"%s\"\n",
 	       PCI_BDF_PARAMS(dev_info->bdf), cell->config->name);
 
+	printk("dev_info->shmem_regions_start %d\n", dev_info->shmem_regions_start);
+	printk("dev_info->shmem_peers %d\n", dev_info->shmem_peers);
+	printk("cell->config->num_memory_regions %d\n", cell->config->num_memory_regions);
+	printk("dev_info->num_msix_vectors %d\n", dev_info->num_msix_vectors);
+
 	if (dev_info->shmem_regions_start + 2 + dev_info->shmem_peers >
 	    cell->config->num_memory_regions ||
 	    dev_info->num_msix_vectors > IVSHMEM_MSIX_VECTORS)
@@ -411,6 +416,9 @@ int ivshmem_init(struct cell *cell, struct pci_device *device)
 			break;
 
 	id = dev_info->shmem_dev_id;
+
+	printk("dev_info->shmem_dev_id %d\n", id);
+
 	if (id >= IVSHMEM_MAX_PEERS)
 		return trace_error(-EINVAL);
 
