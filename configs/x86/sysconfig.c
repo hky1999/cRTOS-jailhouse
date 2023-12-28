@@ -45,7 +45,8 @@
 struct {
 	struct jailhouse_system header;
 	__u64 cpus[1];
-	struct jailhouse_memory mem_regions[51];
+	// struct jailhouse_memory mem_regions[51];
+	struct jailhouse_memory mem_regions[58];
 	struct jailhouse_irqchip irqchips[1];
 	struct jailhouse_pio pio_regions[16];
 	struct jailhouse_pci_device pci_devices[21];
@@ -473,12 +474,45 @@ struct {
 				JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_DMA,
 		},
 		/* MemRegion: 42000000-a1ffffff : JAILHOUSE Inmate Memory */
+		// First, remove this entry in the memory region definition.
+		// {
+		// 	.phys_start = 0x42000000,
+		// 	.virt_start = 0x42000000,
+		// 	.size = 0x60000000,
+		// 	.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE,
+		// },
+		// Then, you should create memory regions for the shadow device with:
+		// * PAGE_SIZE state table
+		// * 1GB R/W Region, marked with execute
+		// * 4x PAGE_SIZE Input and Output regions Allocate the memory 
+		// from the Inmate Memory manually. 
+		// Append these after the Inmate Memory region.
 		{
 			.phys_start = 0x42000000,
 			.virt_start = 0x42000000,
-			.size = 0x60000000,
-			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE,
+			.size = 0x1000,
+			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_ROOTSHARED,
 		},
+		{
+			.phys_start = 0x42000000 + 0x1000,
+			.virt_start = 0x42000000 + 0x1000,
+			.size =       0x40000000,
+			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
+				JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_ROOTSHARED,
+		},
+		{
+			.phys_start = 0x42000000 + 0x40001000,
+			.virt_start = 0x42000000 + 0x40001000,
+			.size = 0x4000,
+			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE | JAILHOUSE_MEM_ROOTSHARED,
+		},
+		{
+			.phys_start = 0x42000000 + 0x40005000,
+			.virt_start = 0x42000000 + 0x40005000,
+			.size = 0x4000,
+			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_ROOTSHARED,
+		},
+		JAILHOUSE_SHMEM_NET_REGIONS(0x42000000 + 0x40205000, 0),
 	},
 
 	.irqchips = {
