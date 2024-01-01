@@ -40,7 +40,7 @@ struct {
 	struct jailhouse_cell_desc cell;
 	__u64 cpus[1];
 	struct jailhouse_memory mem_regions[13];
-	struct jailhouse_cache cache_regions[1];
+	struct jailhouse_cache cache_regions[0];
 	struct jailhouse_irqchip irqchips[2];
 	struct jailhouse_pio pio_regions[2];
 	struct jailhouse_pci_device pci_devices[4];
@@ -131,11 +131,6 @@ struct {
 	},
 
 	.cache_regions = {
-		{
-			.start = 0,
-			.size = 10,
-			.type = JAILHOUSE_CACHE_L3,
-		},
 	},
 
 	.irqchips = {
@@ -201,7 +196,7 @@ struct {
 			.bdf = 0x0e << 3,
 			.bar_mask = JAILHOUSE_IVSHMEM_BAR_MASK_MSIX,
 			.num_msix_vectors = 16,
-			.shmem_regions_start = 0,
+			.shmem_regions_start = 4,
 			.shmem_dev_id = 1,
 			.shmem_peers = 2,
 			.shmem_protocol = 0x0002,
@@ -213,7 +208,7 @@ struct {
 			.bdf = 0x0d << 3,
 			.bar_mask = JAILHOUSE_IVSHMEM_BAR_MASK_MSIX,
 			.num_msix_vectors = 2,
-			.shmem_regions_start = 5,
+			.shmem_regions_start = 9,
 			.shmem_dev_id = 1,
 			.shmem_peers = 2,
 			.shmem_protocol = JAILHOUSE_SHMEM_PROTO_VETH,

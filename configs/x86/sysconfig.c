@@ -489,7 +489,7 @@ struct {
 		// * 1GB R/W Region, marked with execute
 		// * 4x PAGE_SIZE Input and Output regions 
 		// Append these after the Inmate Memory region.
-		/* 50 PAGE_SIZE state table */
+		/* 50->44 PAGE_SIZE state table */
 		{
 			.phys_start = 0x42000000,
 			.virt_start = 0x42000000,
@@ -519,6 +519,7 @@ struct {
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_ROOTSHARED,
 		},
 		// 54 55 56 57
+		// 48 49 50 51
 		JAILHOUSE_SHMEM_NET_REGIONS(0x82205000, 0),
 	},
 
