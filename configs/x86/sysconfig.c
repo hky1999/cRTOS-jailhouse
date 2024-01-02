@@ -144,61 +144,6 @@ struct {
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_DMA,
 		},
-		// /* MemRegion: c8917018-c8926c57 : System RAM */
-		// {
-		// 	.phys_start = 0xc8917018,
-		// 	.virt_start = 0xc8917018,
-		// 	.size = 0x10000,
-		// 	.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
-		// 		JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_DMA,
-		// },
-		// /* MemRegion: c8926c58-c8927017 : System RAM */
-		// {
-		// 	.phys_start = 0xc8926c58,
-		// 	.virt_start = 0xc8926c58,
-		// 	.size = 0x1000,
-		// 	.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
-		// 		JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_DMA,
-		// },
-		// /* MemRegion: c8927018-c8937057 : System RAM */
-		// {
-		// 	.phys_start = 0xc8927018,
-		// 	.virt_start = 0xc8927018,
-		// 	.size = 0x11000,
-		// 	.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
-		// 		JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_DMA,
-		// },
-		// /* MemRegion: c8937058-c8d4efff : System RAM */
-		// {
-		// 	.phys_start = 0xc8937058,
-		// 	.virt_start = 0xc8937058,
-		// 	.size = 0x418000,
-		// 	.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
-		// 		JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_DMA,
-		// },
-		// /* MemRegion: c8d4f000-c8d55fff : ACPI Non-volatile Storage */
-		// {
-		// 	.phys_start = 0xc8d4f000,
-		// 	.virt_start = 0xc8d4f000,
-		// 	.size = 0x7000,
-		// 	.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE,
-		// },
-		// /* MemRegion: c8d56000-c9193fff : System RAM */
-		// {
-		// 	.phys_start = 0xc8d56000,
-		// 	.virt_start = 0xc8d56000,
-		// 	.size = 0x43e000,
-		// 	.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
-		// 		JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_DMA,
-		// },
-		// /* MemRegion: c9654000-da85cfff : System RAM */
-		// {
-		// 	.phys_start = 0xc9654000,
-		// 	.virt_start = 0xc9654000,
-		// 	.size = 0x11209000,
-		// 	.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
-		// 		JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_DMA,
-		// },
 		/* MemRegion: db105000-db168fff : ACPI Tables */
 		{
 			.phys_start = 0xdb105000,
@@ -476,27 +421,19 @@ struct {
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_DMA,
 		},
-		/* 50 MemRegion: 42000000-a1ffffff : JAILHOUSE Inmate Memory */
-		// First, remove this entry in the memory region definition.
-		// {
-		// 	.phys_start = 0x42000000,
-		// 	.virt_start = 0x42000000,
-		// 	.size = 0x60000000,
-		// 	.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE,
-		// },
 		// Then, you should create memory regions for the shadow device with:
 		// * PAGE_SIZE state table
 		// * 1GB R/W Region, marked with execute
 		// * 4x PAGE_SIZE Input and Output regions 
 		// Append these after the Inmate Memory region.
-		/* 50->44 PAGE_SIZE state table */
+		/* 50->43 PAGE_SIZE state table */
 		{
 			.phys_start = 0x42000000,
 			.virt_start = 0x42000000,
 			.size = 0x1000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_ROOTSHARED,
 		},
-		/* 51 1GB R/W Region, marked with execute */
+		/* 51 44 1GB R/W Region, marked with execute */
 		{
 			.phys_start = 0x42001000,
 			.virt_start = 0x42001000,
@@ -504,14 +441,14 @@ struct {
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_ROOTSHARED,
 		},
-		/* 52 4x PAGE_SIZE Output regions  */
+		/* 52 45 4x PAGE_SIZE Output regions  */
 		{
 			.phys_start = 0x82001000,
 			.virt_start = 0x82001000,
 			.size = 0x4000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE | JAILHOUSE_MEM_ROOTSHARED,
 		},
-		/* 53 4x PAGE_SIZE Input regions  */
+		/* 53 46 PAGE_SIZE Input regions  */
 		{
 			.phys_start = 0x82005000,
 			.virt_start = 0x82005000,
@@ -519,7 +456,7 @@ struct {
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_ROOTSHARED,
 		},
 		// 54 55 56 57
-		// 48 49 50 51
+		// 47 48 49 50
 		JAILHOUSE_SHMEM_NET_REGIONS(0x82205000, 0),
 	},
 
