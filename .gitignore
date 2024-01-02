@@ -32,3 +32,4 @@ hypervisor/arch/*/include/generated
 ci/out
 ci/*.tar.xz
 *.pyc
+.vscode/
