@@ -45,11 +45,15 @@
 struct {
 	struct jailhouse_system header;
 	__u64 cpus[1];
-	struct jailhouse_memory mem_regions[47];
+	// struct jailhouse_memory mem_regions[51];
+	// struct jailhouse_memory mem_regions[<NUM OF MEM + 7>];
+	struct jailhouse_memory mem_regions[51];
 	struct jailhouse_irqchip irqchips[1];
-	struct jailhouse_pio pio_regions[14];
-	struct jailhouse_pci_device pci_devices[21];
-	struct jailhouse_pci_capability pci_caps[51];
+	struct jailhouse_pio pio_regions[16];
+	// struct jailhouse_pci_device pci_devices[21];
+	// struct jailhouse_pci_device pci_devices[<NUM of Device> + 2];
+	struct jailhouse_pci_device pci_devices[23];
+	struct jailhouse_pci_capability pci_caps[60];
 } __attribute__((packed)) config = {
 	.header = {
 		.signature = JAILHOUSE_SYSTEM_SIGNATURE,
@@ -140,61 +144,6 @@ struct {
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_DMA,
 		},
-		// /* MemRegion: c8917018-c8926c57 : System RAM */
-		// {
-		// 	.phys_start = 0xc8917018,
-		// 	.virt_start = 0xc8917018,
-		// 	.size = 0x10000,
-		// 	.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
-		// 		JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_DMA,
-		// },
-		// /* MemRegion: c8926c58-c8927017 : System RAM */
-		// {
-		// 	.phys_start = 0xc8926c58,
-		// 	.virt_start = 0xc8926c58,
-		// 	.size = 0x1000,
-		// 	.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
-		// 		JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_DMA,
-		// },
-		// /* MemRegion: c8927018-c8937057 : System RAM */
-		// {
-		// 	.phys_start = 0xc8927018,
-		// 	.virt_start = 0xc8927018,
-		// 	.size = 0x11000,
-		// 	.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
-		// 		JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_DMA,
-		// },
-		// /* MemRegion: c8937058-c8d4efff : System RAM */
-		// {
-		// 	.phys_start = 0xc8937058,
-		// 	.virt_start = 0xc8937058,
-		// 	.size = 0x418000,
-		// 	.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
-		// 		JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_DMA,
-		// },
-		// /* MemRegion: c8d4f000-c8d55fff : ACPI Non-volatile Storage */
-		// {
-		// 	.phys_start = 0xc8d4f000,
-		// 	.virt_start = 0xc8d4f000,
-		// 	.size = 0x7000,
-		// 	.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE,
-		// },
-		// /* MemRegion: c8d56000-c9193fff : System RAM */
-		// {
-		// 	.phys_start = 0xc8d56000,
-		// 	.virt_start = 0xc8d56000,
-		// 	.size = 0x43e000,
-		// 	.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
-		// 		JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_DMA,
-		// },
-		// /* MemRegion: c9654000-da85cfff : System RAM */
-		// {
-		// 	.phys_start = 0xc9654000,
-		// 	.virt_start = 0xc9654000,
-		// 	.size = 0x11209000,
-		// 	.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
-		// 		JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_DMA,
-		// },
 		/* MemRegion: db105000-db168fff : ACPI Tables */
 		{
 			.phys_start = 0xdb105000,
@@ -229,6 +178,34 @@ struct {
 			.phys_start = 0xf7800000,
 			.virt_start = 0xf7800000,
 			.size = 0x400000,
+			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE,
+		},
+		/* MemRegion: f7c00000-f7c00fff : 0000:03:00.1 */
+		{
+			.phys_start = 0xf7c00000,
+			.virt_start = 0xf7c00000,
+			.size = 0x1000,
+			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE,
+		},
+		/* MemRegion: f7c01000-f7c01fff : 0000:03:00.1 */
+		{
+			.phys_start = 0xf7c01000,
+			.virt_start = 0xf7c01000,
+			.size = 0x1000,
+			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE,
+		},
+		/* MemRegion: f7c02000-f7c02fff : 0000:03:00.0 */
+		{
+			.phys_start = 0xf7c02000,
+			.virt_start = 0xf7c02000,
+			.size = 0x1000,
+			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE,
+		},
+		/* MemRegion: f7c03000-f7c03fff : 0000:03:00.0 */
+		{
+			.phys_start = 0xf7c03000,
+			.virt_start = 0xf7c03000,
+			.size = 0x1000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE,
 		},
 		/* MemRegion: f7d00000-f7d01fff : nvme */
@@ -385,27 +362,27 @@ struct {
 			.size = 0x4b000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE,
 		},
-		/* MemRegion: 100000000-313dfffff : System RAM */
+		/* MemRegion: 100000000-305dfffff : System RAM */
 		{
 			.phys_start = 0x100000000,
 			.virt_start = 0x100000000,
-			.size = 0x213e00000,
+			.size = 0x205e00000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_DMA,
 		},
-		/* MemRegion: 313e00000-315ffffff : Kernel */
+		/* MemRegion: 305e00000-307ffffff : Kernel */
 		{
-			.phys_start = 0x313e00000,
-			.virt_start = 0x313e00000,
+			.phys_start = 0x305e00000,
+			.virt_start = 0x305e00000,
 			.size = 0x2200000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_DMA,
 		},
-		/* MemRegion: 316000000-81edfffff : System RAM */
+		/* MemRegion: 308000000-81edfffff : System RAM */
 		{
-			.phys_start = 0x316000000,
-			.virt_start = 0x316000000,
-			.size = 0x508e00000,
+			.phys_start = 0x308000000,
+			.virt_start = 0x308000000,
+			.size = 0x516e00000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_DMA,
 		},
@@ -444,14 +421,12 @@ struct {
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_DMA,
 		},
-		// /* MemRegion: 42000000-a1ffffff : JAILHOUSE Inmate Memory */
-		// {
-		// 	.phys_start = 0x42000000,
-		// 	.virt_start = 0x42000000,
-		// 	.size = 0x60000000,
-		// 	.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE,
-		// },
-		/* 50->43 39 PAGE_SIZE state table */ 
+		// Then, you should create memory regions for the shadow device with:
+		// * PAGE_SIZE state table
+		// * 1GB R/W Region, marked with execute
+		// * 4x PAGE_SIZE Input and Output regions 
+		// Append these after the Inmate Memory region.
+		/* 50->43 PAGE_SIZE state table */
 		{
 			.phys_start = 0x42000000,
 			.virt_start = 0x42000000,
@@ -482,7 +457,6 @@ struct {
 		},
 		// 54 55 56 57
 		// 47 48 49 50
-		// 43
 		JAILHOUSE_SHMEM_NET_REGIONS(0x82205000, 0),
 	},
 
@@ -532,6 +506,10 @@ struct {
 		/* PIO_RANGE(0xa30, 0x10), */
 		/* Port I/O: 0a40-0a4f : pnp 00:04 */
 		/* PIO_RANGE(0xa40, 0x10), */
+		/* Port I/O: e000-e007 : 0000:03:00.1 */
+		PIO_RANGE(0xe000, 0x8),
+		/* Port I/O: e010-e017 : 0000:03:00.0 */
+		PIO_RANGE(0xe010, 0x8),
 		/* Port I/O: f000-f03f : 0000:00:02.0 */
 		PIO_RANGE(0xf000, 0x40),
 		/* Port I/O: f040-f05f : 0000:00:1f.3 */
@@ -895,6 +873,44 @@ struct {
 			.msix_region_size = 0x1000,
 			.msix_address = 0xf7d02000,
 		},
+		/* PCIDevice: 03:00.0 */
+		{
+			.type = JAILHOUSE_PCI_TYPE_DEVICE,
+			.iommu = 1,
+			.domain = 0x0,
+			.bdf = 0x300,
+			.bar_mask = {
+				0xfffffff8, 0xfffff000, 0x00000000,
+				0x00000000, 0x00000000, 0xfffff000,
+			},
+			.caps_start = 49,
+			.num_caps = 5,
+			.num_msi_vectors = 8,
+			.msi_64bits = 1,
+			.msi_maskable = 0,
+			.num_msix_vectors = 0,
+			.msix_region_size = 0x0,
+			.msix_address = 0x0,
+		},
+		/* PCIDevice: 03:00.1 */
+		{
+			.type = JAILHOUSE_PCI_TYPE_DEVICE,
+			.iommu = 1,
+			.domain = 0x0,
+			.bdf = 0x301,
+			.bar_mask = {
+				0xfffffff8, 0xfffff000, 0x00000000,
+				0x00000000, 0x00000000, 0xfffff000,
+			},
+			.caps_start = 54,
+			.num_caps = 4,
+			.num_msi_vectors = 8,
+			.msi_64bits = 1,
+			.msi_maskable = 0,
+			.num_msix_vectors = 0,
+			.msix_region_size = 0x0,
+			.msix_address = 0x0,
+		},
 		/* PCIDevice: 04:00.0 */
 		{
 			.type = JAILHOUSE_PCI_TYPE_BRIDGE,
@@ -905,7 +921,7 @@ struct {
 				0x00000000, 0x00000000, 0x00000000,
 				0x00000000, 0x00000000, 0x00000000,
 			},
-			.caps_start = 46,
+			.caps_start = 58,
 			.num_caps = 2,
 			.num_msi_vectors = 0,
 			.msi_64bits = 0,
@@ -923,7 +939,7 @@ struct {
 			.num_msix_vectors = 16,
 			// <NUM OF MEM - 1> = 50
 			// .shmem_regions_start = <NUM OF MEM + 1>,
-			.shmem_regions_start = 39,
+			.shmem_regions_start = 43,
 			.shmem_dev_id = 0,
 			.shmem_peers = 2,
 			.shmem_protocol = 0x0002,
@@ -936,7 +952,7 @@ struct {
 			.bar_mask = JAILHOUSE_IVSHMEM_BAR_MASK_MSIX,
 			.num_msix_vectors = 2,
 			// <NUM OF MEM + 3> = 54
-			.shmem_regions_start = 43,
+			.shmem_regions_start = 47,
 			.shmem_dev_id = 0,
 			.shmem_peers = 2,
 			.shmem_protocol = JAILHOUSE_SHMEM_PROTO_VETH,
@@ -1253,6 +1269,62 @@ struct {
 			.id = PCI_EXT_CAP_ID_SECPCI | JAILHOUSE_PCI_EXT_CAP,
 			.start = 0x300,
 			.len = 0x10,
+			.flags = 0,
+		},
+		/* PCIDevice: 03:00.0 */
+		{
+			.id = PCI_CAP_ID_MSI,
+			.start = 0x50,
+			.len = 0xe,
+			.flags = JAILHOUSE_PCICAPS_WRITE,
+		},
+		{
+			.id = PCI_CAP_ID_PM,
+			.start = 0x78,
+			.len = 0x8,
+			.flags = JAILHOUSE_PCICAPS_WRITE,
+		},
+		{
+			.id = PCI_CAP_ID_EXP,
+			.start = 0x80,
+			.len = 0x14,
+			.flags = 0,
+		},
+		{
+			.id = PCI_EXT_CAP_ID_VC | JAILHOUSE_PCI_EXT_CAP,
+			.start = 0x100,
+			.len = 0x10,
+			.flags = 0,
+		},
+		{
+			.id = PCI_EXT_CAP_ID_ERR | JAILHOUSE_PCI_EXT_CAP,
+			.start = 0x800,
+			.len = 0x40,
+			.flags = 0,
+		},
+		/* PCIDevice: 03:00.1 */
+		{
+			.id = PCI_CAP_ID_MSI,
+			.start = 0x50,
+			.len = 0xe,
+			.flags = JAILHOUSE_PCICAPS_WRITE,
+		},
+		{
+			.id = PCI_CAP_ID_PM,
+			.start = 0x78,
+			.len = 0x8,
+			.flags = JAILHOUSE_PCICAPS_WRITE,
+		},
+		{
+			.id = PCI_CAP_ID_EXP,
+			.start = 0x80,
+			.len = 0x14,
+			.flags = 0,
+		},
+		{
+			.id = PCI_EXT_CAP_ID_ERR | JAILHOUSE_PCI_EXT_CAP,
+			.start = 0x100,
+			.len = 0x40,
 			.flags = 0,
 		},
 		/* PCIDevice: 04:00.0 */

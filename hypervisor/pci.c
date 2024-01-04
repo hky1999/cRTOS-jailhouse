@@ -217,8 +217,11 @@ enum pci_access pci_cfg_read_moderate(struct pci_device *device, u16 address,
 	if (device->info->type != JAILHOUSE_PCI_TYPE_BRIDGE) {
 		/* Emulate BAR access, always returning the shadow value. */
 		if (address >= PCI_CFG_BAR && address <= PCI_CFG_BAR_END) {
+			// printk("pci_cfg_read_moderate TYPE_BRIDGE %02x:%02x.%x  address 0x%x: size 0x%x\n",PCI_BDF_PARAMS(device->info->bdf), address, size);
 			bar_no = (address - PCI_CFG_BAR) / 4;
 			*value = device->bar[bar_no] >> ((address % 4) * 8);
+
+			// printk("	read bar [%d]: 0x%x\n", bar_no, *value);
 			return PCI_ACCESS_DONE;
 		}
 
@@ -229,8 +232,11 @@ enum pci_access pci_cfg_read_moderate(struct pci_device *device, u16 address,
 		}
 	}
 
-	if (device->info->type == JAILHOUSE_PCI_TYPE_IVSHMEM)
+	if (device->info->type == JAILHOUSE_PCI_TYPE_IVSHMEM) {
+		// printk("pci_cfg_read_moderate TYPE_IVSHMEM %02x:%02x.%x  address 0x%x: size 0x%x\n",PCI_BDF_PARAMS(device->info->bdf), address, size);
 		return ivshmem_pci_cfg_read(device, address, value);
+	}
+		
 
 	if (address < PCI_CONFIG_HEADER_SIZE)
 		return PCI_ACCESS_PERFORM;
@@ -279,6 +285,8 @@ static int pci_update_msix(struct pci_device *device,
 enum pci_access pci_cfg_write_moderate(struct pci_device *device, u16 address,
 				       unsigned int size, u32 value)
 {
+	// printk("pci_cfg_write_moderate device %02x:%02x.%x  address 0x%x: size 0x%x value 0x%x\n",PCI_BDF_PARAMS(device->info->bdf), address, size, value);
+	
 	const struct jailhouse_pci_capability *cap;
 	/* initialize list to work around wrong compiler warning */
 	unsigned int bias_shift = (address % 4) * 8;
@@ -410,6 +418,9 @@ static enum mmio_result pci_mmconfig_access_handler(void *arg,
 	enum pci_access result;
 	u32 val;
 
+	printk("\npci_mmconfig_access_handler: mmio->address 0x%lx\n", mmio->address);
+	printk("device %02x:%02x.%x,  bdf: 0x%x reg_addr 0x%x\n",PCI_BDF_PARAMS(bdf), bdf, reg_addr);
+
 	/* only up to 4-byte accesses supported */
 	if (mmio->size > 4)
 		goto invalid_access;
@@ -417,6 +428,7 @@ static enum mmio_result pci_mmconfig_access_handler(void *arg,
 	device = pci_get_assigned_device(this_cell(), bdf);
 
 	if (mmio->is_write) {
+		printk("  mmio write value: 0x%lx\n", mmio->value);
 		result = pci_cfg_write_moderate(device, reg_addr, mmio->size,
 						mmio->value);
 		if (result == PCI_ACCESS_REJECT)
@@ -424,6 +436,8 @@ static enum mmio_result pci_mmconfig_access_handler(void *arg,
 	} else {
 		result = pci_cfg_read_moderate(device, reg_addr, mmio->size,
 					       &val);
+		printk("  mmio read value: 0x%x\n", val);
+		
 		if (result != PCI_ACCESS_PERFORM)
 			mmio->value = val;
 	}
@@ -815,8 +829,11 @@ void pci_config_commit(struct cell *cell_added_removed)
 				if (device->cell == &root_cell)
 					pci_suppress_msix(device, cap, false);
 			}
-			if (err)
-				goto error;
+			if (err) {
+				panic_printk("FATAL: Unsupported MSI/MSI-X state, device %02x:%02x.%x\n",
+		     		PCI_BDF_PARAMS(device->info->bdf));
+			}
+				// goto error;
 		}
 		if (device->info->type == JAILHOUSE_PCI_TYPE_IVSHMEM) {
 			err = ivshmem_update_msix(device);
@@ -835,6 +852,8 @@ error:
 		panic_printk(", cap %d\n", cap->id);
 	else
 		panic_printk("\n");
+
+	return;
 	panic_stop();
 }
 
@@ -849,11 +868,19 @@ static int pci_init(void)
 	end_bus = system_config->platform_info.pci_mmconfig_end_bus;
 	mmcfg_size = (end_bus + 1) * 256 * 4096;
 
+	printk("mmcfg_start 0x%llx\n", mmcfg_start);
+	printk("end_bus 0x%x\n", end_bus);
+	printk("mmcfg_size 0x%llx\n", mmcfg_size);
+
+
 	if (mmcfg_start != 0 && !system_config->platform_info.pci_is_virtual) {
 		pci_space = paging_map_device(mmcfg_start, mmcfg_size);
 		if (!pci_space)
 			return -ENOMEM;
 	}
+
+	printk("pci_space 0x%p\n", pci_space);
+
 
 	return pci_cell_init(&root_cell);
 }

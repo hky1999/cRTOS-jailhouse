@@ -380,6 +380,8 @@ enum pci_access ivshmem_pci_cfg_read(struct pci_device *device, u16 address,
 		*value = ive->cspace[address / 4] >> ((address % 4) * 8);
 	else
 		*value = -1;
+
+	// printk("ivshmem_pci_cfg_read %02x:%02x.%x address 0x%x value 0x%x\n", PCI_BDF_PARAMS(device->info->bdf), address, *value);
 	return PCI_ACCESS_DONE;
 }
 

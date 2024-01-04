@@ -160,7 +160,10 @@ int x86_pci_config_handler(u16 port, bool dir_in, unsigned int size)
 	u16 bdf, address;
 	int result = 0;
 
+	// printk("x86_pci_config_handler port 0x%x size %x\n", port, size);
+
 	if (port == PCI_REG_ADDR_PORT) {
+		// printk("x86_pci_config_handler PCI_REG_ADDR_PORT\n");
 		/* only 4-byte accesses are valid */
 		if (size != 4)
 			goto invalid_access;
@@ -189,6 +192,13 @@ int x86_pci_config_handler(u16 port, bool dir_in, unsigned int size)
 
 		address = (addr_port_val & PCI_ADDR_REGNUM_MASK) +
 			port - PCI_REG_DATA_PORT;
+
+		// printk("x86_pci_config_handler PCI config %s, port: %x, size %d, "
+		//      "address port: %x\n", dir_in ? "read" : "write", port,
+		//      size, cell->arch.pci_addr_port_val);
+
+		// printk("x86_pci_config_handler device %02x:%02x.%x address 0x%x\n",
+		//      PCI_BDF_PARAMS(bdf), address);
 
 		if (dir_in)
 			result = data_port_in_handler(device, address, size);
